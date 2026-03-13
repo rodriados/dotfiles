@@ -1,7 +1,7 @@
 # dotfiles
 ![license MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
-This repository contains @rodriados's personal dotfiles and local workstation setup
+This repository contains [**@rodriados**](https://github.com/rodriados)'s personal dotfiles and local workstation setup
 scripts.
 
 ## Motivation
