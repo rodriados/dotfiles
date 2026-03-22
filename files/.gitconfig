@@ -1,0 +1,206 @@
+[alias]
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  a = add
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  ap = add -p
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  b = branch
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  c = commit
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Commit all changes.
+  ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  co = checkout
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  cp = cherry-pick
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Show the diff between the latest commit and the current state.
+  d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  f = fetch
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  g = log --pretty=oneline -n 20 --graph --abbrev-commit
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Switch to a branch, creating it if necessary.
+  go = "!f() { git checkout \"$1\"; || git checkout -b \"$1\" 2> /dev/null }; f"
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  i = init
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  l = log
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  m = commit --amend
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  p = push
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  r = rebase
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  s = status
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  u = commit --amend --no-edit --reuse-message=HEAD
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  ua = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit --amend --no-edit --reuse-message=HEAD
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  w = instaweb --httpd=webrick
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Show verbose output about tags, branches or remotes
+  tags = tag -l
+  branches = branch --all
+  remotes = remote --verbose
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # List aliases.
+  aliases = config --get-regexp alias
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Amend the currently staged files to the latest commit.
+  update = commit --amend --reuse-message=HEAD
+  amend = commit --amend
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Undo last commits
+  undo = "!f() { git reset --soft \"HEAD~${1:-1}\"; }; f"
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Credit an author on the latest commit.
+  credit = "!f() { git commit --amend --author \"$1 <$2>\" --no-edit --reuse-message=HEAD; }; f"
+  credit-co-author = "!f() { GIT_EDITOR=\"git interpret-trailers --in-place --trailer='Co-authored-by: $1 <$2>'\" git commit --amend --no-edit; }; f"
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Interactive rebase with the given number of latest commits.
+  reb = "!r() { git rebase -i HEAD~$1; }; r"
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Remove the old tag with this name and tag the latest commit with it.
+  retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # List contributors with number of commits.
+  contributors = shortlog --summary --numbered
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Show the user email for the current repository.
+  whoami = config user.email
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+[apply]
+  whitespace = fix
+
+[branch]
+  sort = -committerdate
+
+[core]
+  # Treat spaces before tabs and all kinds of trailing whitespace as an error.
+  # [default] trailing-space: looks for spaces at the end of a line
+  # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+  trustctime = false
+  precomposeunicode = false
+  untrackedCache = true
+
+[color]
+  ui = auto
+
+[color "branch"]
+  current = green bold
+  local = green
+  remote = yellow
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red
+  new = green
+
+[color "status"]
+  added = green
+  changed = yellow
+  untracked = red
+
+[diff]
+  renames = copies
+
+[diff "bin"]
+  textconv = hexdump -v -C
+
+[help]
+  autocorrect = 1
+
+[push]
+  default = simple
+  followTags = true
+
+[rebase]
+  updateRefs = true
+
+[user]
+  useConfigOnly = true
+
+[url "git@github.com:"]
+  insteadOf = "gh:"
+  pushInsteadOf = "github:"
+  pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+  insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+  insteadOf = "gst:"
+  pushInsteadOf = "gist:"
+  pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+  insteadOf = "gist:"
+
+[include]
+  path = ~/.gitconfig.local
