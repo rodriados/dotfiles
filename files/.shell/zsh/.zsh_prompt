@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+# Dotfiles and environment variables repository.
+# @file The shell prompt configuration script for zsh.
+# @author Rodrigo Siqueira <me@rodriados.com>
+# @copyright 2026-present Rodrigo Siqueira
+
+# If oh-my-zsh is not running, we must manually source our prompt theme.
+if [ -z "$ZSH" ]; then
+  source ~/.shell/zsh/themes/rodriados.zsh-theme
+fi

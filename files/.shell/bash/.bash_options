@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Dotfiles and environment variables repository.
+# @file The shell options configuration script for bash.
+# @author Rodrigo Siqueira <me@rodriados.com>
+# @copyright 2026-present Rodrigo Siqueira
+
+# Enable some Bash 4 features when possible:
+# * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
+# * Recursive globbing, e.g. `echo **/*.txt`
+for option in autocd globstar nocaseglob histappend cdspell; do
+  shopt -s "$option" 2> /dev/null;
+done
+
+# Include local options configuration.
+if [ -f ~/.bash_options.local ]; then
+  source ~/.bash_options.local
+fi
