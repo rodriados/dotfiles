@@ -4,6 +4,8 @@
 # @author Rodrigo Siqueira <me@rodriados.com>
 # @copyright 2026-present Rodrigo Siqueira
 
+export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
+
 # Load the zsh dotfiles, and then some:
 # * ~/.zsh_path can be used to extend `$PATH`.
 # * ~/.zsh_extra can be used for other settings you don’t want to commit.
