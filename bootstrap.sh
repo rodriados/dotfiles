@@ -92,6 +92,7 @@ if [ ! -d "$DOTFILES_DIRECTORY" ]; then
   prompt GITHUB_REPOSITORY "What's the name of your dotfiles repository?"
 
   declare -r DOTFILES_TARBALL_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/tarball"
+  declare -r DOTFILES_REPOSITORY_UPSTREAM="https://github.com/$GITHUB_REPOSITORY.git"
 
   # Download the GitHub repository from the tarball and extract its contents into
   # the provided destination directory.
@@ -112,4 +113,4 @@ fi
 # Change into the dotfiles directory and execute the setup script to configure the
 # system as requested by the user.
 cd "$DOTFILES_DIRECTORY"
-source script/setup.sh
+script/setup.sh $DOTFILES_REPOSITORY_UPSTREAM
