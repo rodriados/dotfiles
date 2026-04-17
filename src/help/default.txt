@@ -1,8 +1,0 @@
-Usage: dotfiles COMMAND [options]
-
-Dotfiles utility tools.
-
-Commands:
-  apply         Install dotfiles from repository
-  git           Dotfiles repository git command
-  help          Display this help message and exit

@@ -5,16 +5,33 @@
 # @copyright 2026-present Rodrigo Siqueira
 set -e
 
-declare -r SCRIPTPATH=$(cd -- "$(dirname "$(realpath "$0")")" >/dev/null 2>&1; pwd -P)
-declare -r SOURCEROOT=$(cd -- "$(dirname "$SCRIPTPATH")" >/dev/null 2>&1; pwd -P)
-declare -r DOTFILES_COMMAND_ARGUMENT="$1"
+readonly SCRIPTFILE="$(realpath "$0")"
+
+declare -rx SCRIPTPATH=$(cd -- "$(dirname "$SCRIPTFILE")" >/dev/null 2>&1; pwd -P)
+declare -rx SOURCEROOT=$(cd -- "$(dirname "$SCRIPTPATH")" >/dev/null 2>&1; pwd -P)
+declare -rx DOTFILES_COMMAND_ARGUMENT="$1"
+
+# Show a help message to the user and terminate script execution.
+# @param $@ The optional command to get help message for.
+runhelp() {
+  bash $SCRIPTPATH/command/help.sh "$@"
+  exit 0
+}
+
+# Check whether the user wants some help on how to use any of the dotfiles tools.
+# Once the help message is shown, no other action is performed.
+if printf '%s\0' "$@" | grep -qFxzE -- "--help|-h"; then
+  runhelp "$@"
+fi
 
 shift
 
-# Executes the selected function from the remaining command line arguments. If the
+# Execute the selected function from the remaining command line arguments. If the
 # selected function is unknown, a help message is displayed instead.
 case "$DOTFILES_COMMAND_ARGUMENT" in
-  apply ) source $SCRIPTPATH/detail/apply.sh "$@"     ;;
-  git   ) source $SCRIPTPATH/detail/git.sh "$@"       ;;
-  *     ) cat $SCRIPTPATH/help/default.txt            ;;
+  apply ) bash $SCRIPTPATH/command/apply.sh "$@"          ;;
+  git   ) bash $SCRIPTPATH/command/git.sh "$@"            ;;
+  *     )
+    echo "Unknown command: $DOTFILES_COMMAND_ARGUMENT"
+    runhelp "$@"                                          ;;
 esac
