@@ -20,7 +20,7 @@ runhelp() {
 
 # Check whether the user wants some help on how to use any of the dotfiles tools.
 # Once the help message is shown, no other action is performed.
-if printf '%s\0' "$@" | grep -qFxzE -- "--help|-h"; then
+if printf '%s\0' "$@" | grep -qxzE -- "--help|-h"; then
   runhelp "$@"
 fi
 
