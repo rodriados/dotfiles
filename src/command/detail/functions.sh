@@ -3,7 +3,9 @@
 # @file The functions for setting up dotfiles into the system.
 # @author Rodrigo Siqueira <me@rodriados.com>
 # @copyright 2026-present Rodrigo Siqueira
-readonly DATE="$(date +%Y%m%d%H%M%S)"
+DATE="$(date +%Y%m%d%H%M%S)"
+
+readonly DATE
 readonly CACHEPATH="$SOURCEROOT/.cache"
 readonly BACKUPPATH="$CACHEPATH/$DATE"
 readonly REPORTFILE="$CACHEPATH/report.txt"
@@ -15,8 +17,7 @@ declare -x DOTFILES_DRYRUN_ARGUMENT
 # Prepare execution by creating the required directories for an action.
 # @param $1 The name of the file that will be created.
 prepare() {
-  local directory=$(dirname "$1")
-  mkdir -p "$directory"
+  mkdir -p "$(dirname "$1")"
 }
 
 # Log an action by appending the action description in the report file.
@@ -24,7 +25,8 @@ prepare() {
 # @param $2 The action source file path.
 # @param $3 The action destination file path.
 report() {
-  local format=$(printf '"%s" ' "${@:2:2}")
+  local format
+  format=$(printf '"%s" ' "${@:2:2}")
   if [ ! -z "$DOTFILES_DRYRUN_ARGUMENT" ];
     then echo "$1 $format"
     else
@@ -95,7 +97,7 @@ movefile() {
 backupfile() {
   report backup "$@"
   if [ -z "$DOTFILES_DRYRUN_ARGUMENT" ]; then
-    mkdir -p $BACKUPPATH
+    mkdir -p "$BACKUPPATH"
     mv "$1" "$BACKUPPATH/"
   fi
 }

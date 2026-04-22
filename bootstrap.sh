@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Dotfiles and environment variables repository.
 # @file The script for bootstraping the download and installation of dotfiles.
 # @author Rodrigo Siqueira <me@rodriados.com>
@@ -18,7 +18,7 @@ die () {
 
 # Checks the OS that we are running on and bails out if unknown.
 # Running on an unknown OS might cause potentially dangerous unexpected behavior.
-if ! printf "$(uname -s)" | grep -E -q "^(Darwin|Linux)$"; then
+if ! uname -s | grep -E -q "^(Darwin|Linux)$"; then
   die "Current OS is not supported."
 fi
 
@@ -35,19 +35,17 @@ fi
 prompt() {
   if [ -t 0 ]; then
     local result
-    declare -n reference="$1"
-    read -p "$2 [${!1}]: " result
+    read -rp "$2 [${!1}]: " result
     if [ ! -z "$result" ]; then
-      reference="$result"
+      printf -v "$1" "%s" "$result"
     fi
   fi
 }
 
 # Validates whether a command exists.
 # @param $1 The command to check existance of.
-command_exists() {
+command-exists() {
   command -v "$1" &> /dev/null
-  return $?
 }
 
 # Downloads a file from the internet.
@@ -56,12 +54,10 @@ command_exists() {
 download() {
   local url="$1"
   local output="$2"
-  if command_exists "curl"; then
+  if command-exists "curl"; then
     curl --location --silent --show-error --output "$output" "$url" &> /dev/null
-    return $?
-  elif command_exists "wget"; then
+  elif command-exists "wget"; then
     wget --quiet --output-document="$output" "$url" &> /dev/null
-    return $?
   else
     die "Unable to download repository."
   fi
@@ -73,10 +69,9 @@ download() {
 extract() {
   local archive="$1"
   local output_directory="$2"
-  if command_exists "tar"; then
+  if command-exists "tar"; then
     mkdir -p "$output_directory"
     tar --extract --file "$archive" --strip-components 1 --directory "$output_directory"
-    return $?
   else
     die "Unable to extract repository tarball."
   fi
@@ -89,10 +84,10 @@ prompt DOTFILES_DIRECTORY "Where should the dotfiles repository be installed?"
 if [ ! -d "$DOTFILES_DIRECTORY" ]; then
   # Prompt the user about the name of the GitHub repository to be used as source
   # for the dotfiles to be installed in this system.
-  prompt GITHUB_REPOSITORY "What's the name of your dotfiles repository?"
+  prompt GITHUB_REPOSITORY "What's the name of your GitHub dotfiles repository?"
 
-  declare -r DOTFILES_TARBALL_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/tarball"
-  declare -r DOTFILES_REPOSITORY_UPSTREAM="https://github.com/$GITHUB_REPOSITORY.git"
+  readonly DOTFILES_TARBALL_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/tarball"
+  readonly DOTFILES_REPOSITORY_UPSTREAM="https://github.com/$GITHUB_REPOSITORY.git"
 
   # Download the GitHub repository from the tarball and extract its contents into
   # the provided destination directory.
@@ -113,4 +108,4 @@ fi
 # Change into the dotfiles directory and execute the setup script to configure the
 # system as requested by the user.
 cd "$DOTFILES_DIRECTORY"
-script/setup.sh $DOTFILES_REPOSITORY_UPSTREAM
+script/setup.sh "$DOTFILES_REPOSITORY_UPSTREAM"
