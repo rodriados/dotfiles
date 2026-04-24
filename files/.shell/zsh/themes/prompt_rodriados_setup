@@ -1,0 +1,37 @@
+#!/usr/bin/env zsh
+# Dotfiles and environment variables repository.
+# @file The shell prompt build script for standalone zsh.
+# @author Rodrigo Siqueira <me@rodriados.com>
+# @copyright 2026-present Rodrigo Siqueira
+
+source ~/.shell/prompt.sh
+
+_zsh_prompt_report_git() {
+  if [ "$SHELL_PROMPT_CURRENTLY_IN_GIT_REPOSITORY" -eq 1 ]; then
+    echo -n "%F{166}$(_shell_prompt_git_reference)%f"
+    echo -n "%F{125}$(_shell_prompt_git_repo_status)%f"
+  fi
+}
+
+_zsh_prompt_generate_theme() {
+  local ZSH_THEME_PROMPT_PARTS=(
+    "%F{64}%n%f"                # username
+    "%F{33}%~%f"                # directory
+    "$(_zsh_prompt_report_git)" # git branch status
+  )
+  for prompt in "${ZSH_THEME_PROMPT_PARTS[@]}"; do
+    [[ -n "$prompt" ]] && echo -n "$prompt "
+  done
+}
+
+_zsh_prompt_update_prompt() {
+  PROMPT="%B$(_zsh_prompt_generate_theme)%b$ "
+}
+
+prompt_rodriados_setup() {
+  setopt PROMPT_SUBST
+  autoload -Uz add-zsh-hook
+  _shell_prompt_git_directory_check
+  add-zsh-hook chpwd  _shell_prompt_git_directory_check
+  add-zsh-hook precmd _zsh_prompt_update_prompt
+}

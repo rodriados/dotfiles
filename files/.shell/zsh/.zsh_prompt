@@ -4,7 +4,10 @@
 # @author Rodrigo Siqueira <me@rodriados.com>
 # @copyright 2026-present Rodrigo Siqueira
 
-# If oh-my-zsh is not running, we must manually source our prompt theme.
-if [ -z "$ZSH" ]; then
-  source ~/.shell/zsh/themes/rodriados.zsh-theme
+# If oh-my-zsh is not installed, we must use standalone theme
+if [ ! -d ~/.oh-my-zsh ]; then
+  fpath=(~/.shell/zsh/themes $fpath)
+  autoload -Uz promptinit
+  promptinit
+  prompt rodriados
 fi
