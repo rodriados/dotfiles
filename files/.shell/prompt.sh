@@ -19,9 +19,10 @@ _shell_prompt_git_directory_check() {
 
 _shell_prompt_git_reference() {
   {
-    _shell_prompt_git_command symbolic-ref --short HEAD          || \
-    _shell_prompt_git_command describe --tags --exact-match HEAD || \
-    _shell_prompt_git_command rev-parse --short HEAD
+    _shell_prompt_git_command symbolic-ref --quiet --short HEAD || \
+    _shell_prompt_git_command describe --all --exact-match HEAD || \
+    _shell_prompt_git_command rev-parse --short HEAD            || \
+    echo '[?]'
   } 2> /dev/null
 }
 

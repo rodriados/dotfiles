@@ -6,6 +6,14 @@
 
 export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
 
+# Configure terminal colors.
+if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && \
+    infocmp gnome-256color >/dev/null 2>&1;
+  then export TERM='gnome-256color'
+elif infocmp xterm-256color >/dev/null 2>&1;
+  then export TERM='xterm-256color'
+fi;
+
 # Load the bash dotfiles, and then some:
 # * ~/.bash_path can be used to extend `$PATH`.
 # * ~/.bash_extra can be used for other settings you don’t want to commit.
