@@ -3,6 +3,7 @@ link always .gdbinit .gdbinit
 link always .gitconfig .gitconfig keeplocal
 link always .wgetrc .wgetrc
 link always .shell .shell
+link linux  .xbindkeysrc .xbindkeysrc
 
 link zsh .shell/zsh/.zsh_aliases .zsh_aliases keeplocal
 link zsh .shell/zsh/.zsh_prompt  .zsh_prompt
