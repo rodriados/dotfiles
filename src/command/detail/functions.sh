@@ -39,7 +39,7 @@ report() {
 # @param $2 The action destination file path.
 # @param $3 The keep-local configuration flag.
 keeplocal() {
-  if [ -e "$2" ]; then
+  if [ -L "$2" ] || [ -e "$2" ]; then
     if [ "$3" == "keeplocal" ];
       then movefile "$2" "$2.local"
       else backupfile "$2"
