@@ -8,7 +8,7 @@ source ~/.shell/prompt.sh
 
 _bash_prompt_get_host() {
   if [[ "$SSH_TTY" ]];
-    then echo -en "\e[37m[\h] "
+    then echo -en "\[\e[37m\][\h] "
   fi
 }
 
@@ -21,17 +21,19 @@ _bash_prompt_get_user() {
 
 _bash_prompt_report_git() {
   if [ "$SHELL_PROMPT_CURRENTLY_IN_GIT_REPOSITORY" -eq 1 ]; then
-    echo -en "\e[38;5;166m$(_shell_prompt_git_reference)"
-    echo -en "\e[38;5;125m$(_shell_prompt_git_repo_status) "
+    echo -en "${1}$(_shell_prompt_git_reference)"
+    echo -en "${2}$(_shell_prompt_git_repo_status) "
   fi
 }
 
 _bash_prompt_generate_theme() {
+  local GIT_BRANCH_STYLE="\[\e[38;5;166m\]"
+  local GIT_STATUS_STYPE="\[\e[38;5;125m\]"
   local BASH_THEME_PROMPT_PARTS=(
-    "$(_bash_prompt_get_host)"      # host
-    "\$(_bash_prompt_get_user)\u "  # username
-    "\[\e[38;5;33m\]\w "            # directory
-    "\$(_bash_prompt_report_git)"   # git branch status
+    "$(_bash_prompt_get_host)"          # host
+    "\[\$(_bash_prompt_get_user)\]\u "  # username
+    "\[\e[38;5;33m\]\w "                # directory
+    "\$(_bash_prompt_report_git \"$GIT_BRANCH_STYLE\" \"$GIT_STATUS_STYPE\")"
   )
   for prompt in "${BASH_THEME_PROMPT_PARTS[@]}"; do
     [[ -n "$prompt" ]] && echo -en "$prompt"
@@ -40,7 +42,7 @@ _bash_prompt_generate_theme() {
 
 _bash_prompt_setup() {
   _shell_prompt_git_directory_check
-  PROMPT_COMMAND="$PROMPT_COMMAND;_shell_prompt_git_directory_check;"
+  PROMPT_COMMAND="_shell_prompt_git_directory_check;$PROMPT_COMMAND"
   PS1="\[\e[1m\]$(_bash_prompt_generate_theme)\[\e[0m\]\$ "
 }
 

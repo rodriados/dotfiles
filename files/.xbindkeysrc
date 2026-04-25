@@ -1,7 +1,5 @@
-# Configure mouse button 8 to emit "next media" event
 "playerctl next"
-  b:8
-
-# Configure mouse button 9 to emit "previous media" event
-"playerctl previous"
   b:9
+
+"playerctl previous"
+  b:8
