@@ -6,18 +6,53 @@
 
 source ~/.shell/prompt.sh
 
+_zsh_prompt_get_host() {
+  if [[ "$SSH_TTY" ]];
+    then echo -n "%F{$1}%m%f"
+  fi
+}
+
+_zsh_prompt_get_user() {
+  if (( EUID == 0 ));
+    then echo -n "%F{$1}%n%f"
+    else echo -n "%F{$2}%n%f"
+  fi
+}
+
+_zsh_prompt_shorten_cwd() {
+  local ZSH_CWD_PARTS=("${(@s[/])1}")
+  local ZSH_COUNT_CWD_PARTS="${#ZSH_CWD_PARTS}"
+  if [[ "$ZSH_COUNT_CWD_PARTS" -le 3 ]];
+    then echo -n "$1"
+    else
+      printf "%s/%s/^%d/%s"           \
+        "$ZSH_CWD_PARTS[1]"           \
+        "$ZSH_CWD_PARTS[2]"           \
+        "((ZSH_COUNT_CWD_PARTS - 3))" \
+        "$ZSH_CWD_PARTS[-1]"
+  fi
+}
+
+_zsh_prompt_get_cwd() {
+  local ZSH_PROMPT_CWD
+  ZSH_PROMPT_CWD="$(print -P '%~')"
+  ZSH_PROMPT_CWD="$(_zsh_prompt_shorten_cwd "$ZSH_PROMPT_CWD")"
+  echo -n "%F{$1}$ZSH_PROMPT_CWD%f"
+}
+
 _zsh_prompt_report_git() {
   if [ "$SHELL_PROMPT_CURRENTLY_IN_GIT_REPOSITORY" -eq 1 ]; then
-    echo -n "%F{166}$(_shell_prompt_git_reference)%f"
-    echo -n "%F{125}$(_shell_prompt_git_repo_status)%f"
+    echo -n "%F{$1}$(_shell_prompt_git_reference)%f"
+    echo -n "%F{$2}$(_shell_prompt_git_repo_status)%f"
   fi
 }
 
 _zsh_prompt_generate_theme() {
   local ZSH_THEME_PROMPT_PARTS=(
-    "%F{64}%n%f"                # username
-    "%F{33}%~%f"                # directory
-    "$(_zsh_prompt_report_git)" # git branch status
+    "$(_zsh_prompt_get_host 7)"
+    "$(_zsh_prompt_get_user 124 64)"
+    "$(_zsh_prompt_get_cwd 33)"
+    "$(_zsh_prompt_report_git 166 125)"
   )
   for prompt in "${ZSH_THEME_PROMPT_PARTS[@]}"; do
     [[ -n "$prompt" ]] && echo -n "$prompt "
@@ -25,7 +60,7 @@ _zsh_prompt_generate_theme() {
 }
 
 _zsh_prompt_update_prompt() {
-  PROMPT="%B$(_zsh_prompt_generate_theme)%b$ "
+  PROMPT='%B$(_zsh_prompt_generate_theme)%b%# '
 }
 
 prompt_rodriados_setup() {
@@ -34,4 +69,5 @@ prompt_rodriados_setup() {
   _shell_prompt_git_directory_check
   add-zsh-hook chpwd  _shell_prompt_git_directory_check
   add-zsh-hook precmd _zsh_prompt_update_prompt
+  RPROMPT='%B%(?..%F{1}[%?]%f)%(1j. &%j.)%b'
 }
