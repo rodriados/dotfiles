@@ -8,15 +8,46 @@ source ~/.shell/prompt.sh
 
 _bash_prompt_get_host() {
   if [[ "$SSH_TTY" ]];
-    then echo -en "\[\e[37m\][\h] "
+    then echo -en "${2}${1} "
   fi
 }
 
 _bash_prompt_get_user() {
   if [[ "$USER" == "root" ]];
-    then echo -en "\e[38;5;124m"
-    else echo -en "\e[38;5;64m"
+    then echo -en "${2}${1} "
+    else echo -en "${3}${1} "
   fi
+}
+
+_bash_prompt_shorten_cwd() {
+  IFS='/' read -ra BASH_CWD_PARTS <<< "$1"
+  local BASH_COUNT_CWD_PARTS="${#BASH_CWD_PARTS[@]}"
+  if [[ "$BASH_COUNT_CWD_PARTS" -le 3 ]];
+    then echo -n "$1"
+    else
+      printf "%s/^%d/%s/%s"             \
+        "${BASH_CWD_PARTS[0]}"          \
+        "$((BASH_COUNT_CWD_PARTS - 3))" \
+        "${BASH_CWD_PARTS[-2]}"         \
+        "${BASH_CWD_PARTS[-1]}"
+  fi
+}
+
+_bash_prompt_get_git_aware_cwd() {
+  if [ "$SHELL_PROMPT_CURRENTLY_IN_GIT_REPOSITORY" -eq 1 ];
+    then
+      local BASH_PROMPT_CWD
+      BASH_PROMPT_CWD="$(basename $(git rev-parse --show-toplevel))"
+      BASH_PROMPT_CWD="$BASH_PROMPT_CWD/$(git rev-parse --show-prefix)"
+      echo -n "${BASH_PROMPT_CWD%/}"
+    else echo -n "$1"
+  fi
+}
+
+_bash_prompt_get_cwd() {
+  local BASH_PROMPT_CWD
+  BASH_PROMPT_CWD="$(_bash_prompt_get_git_aware_cwd "$1")"
+  echo -en "${2}$(_bash_prompt_shorten_cwd "$BASH_PROMPT_CWD") "
 }
 
 _bash_prompt_report_git() {
@@ -26,14 +57,37 @@ _bash_prompt_report_git() {
   fi
 }
 
+_bash_prompt_report_jobs() {
+  if [[ "$1" -gt 0 ]];
+    then echo -en "${2}&${1} "
+  fi
+}
+
+_bash_prompt_get_last_rc() {
+  for res in ${PIPESTATUS[*]}; do
+    if [[ "$res" > 0 ]]; then
+      echo -en "${1}[$res] "
+      return 0
+    fi
+  done
+}
+
 _bash_prompt_generate_theme() {
+  local HOST_STYLE="\[\e[37m\]"
+  local USER_ROOT_STYLE="\[\e[38;5;124m\]"
+  local USER_COMMON_STYLE="\[\e[38;5;64m\]"
+  local DIRECTORY_STYLE="\[\e[38;5;33m\]"
   local GIT_BRANCH_STYLE="\[\e[38;5;166m\]"
-  local GIT_STATUS_STYPE="\[\e[38;5;125m\]"
+  local GIT_STATUS_STYLE="\[\e[38;5;125m\]"
+  local BACKGROUND_JOBS_STYLE="\[\e[37m\]"
+  local LAST_RETURN_CODE_STYLE="\[\e[38;5;1m\]"
   local BASH_THEME_PROMPT_PARTS=(
-    "$(_bash_prompt_get_host)"          # host
-    "\[\$(_bash_prompt_get_user)\]\u "  # username
-    "\[\e[38;5;33m\]\w "                # directory
-    "\$(_bash_prompt_report_git \"$GIT_BRANCH_STYLE\" \"$GIT_STATUS_STYPE\")"
+    "\$(_bash_prompt_get_host '\h' '$HOST_STYLE')"
+    "\$(_bash_prompt_get_user '\u' '$USER_ROOT_STYLE' '$USER_COMMON_STYLE')"
+    "\$(_bash_prompt_get_cwd  '\w' '$DIRECTORY_STYLE')"
+    "\$(_bash_prompt_report_git '$GIT_BRANCH_STYLE' '$GIT_STATUS_STYLE')"
+    "\$(_bash_prompt_report_jobs '\j' '$BACKGROUND_JOBS_STYLE')"
+    "\$(_bash_prompt_get_last_rc '$LAST_RETURN_CODE_STYLE')"
   )
   for prompt in "${BASH_THEME_PROMPT_PARTS[@]}"; do
     [[ -n "$prompt" ]] && echo -en "$prompt"
@@ -42,8 +96,8 @@ _bash_prompt_generate_theme() {
 
 _bash_prompt_setup() {
   _shell_prompt_git_directory_check
-  PROMPT_COMMAND="_shell_prompt_git_directory_check;$PROMPT_COMMAND"
-  PS1="\[\e[1m\]$(_bash_prompt_generate_theme)\[\e[0m\]\$ "
+  export PROMPT_COMMAND="_shell_prompt_git_directory_check;$PROMPT_COMMAND"
+  export PS1="\[\e[1m\]$(_bash_prompt_generate_theme)\[\e[0m\]\$ "
 }
 
 _bash_prompt_setup
