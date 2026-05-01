@@ -4,7 +4,7 @@
 # @author Rodrigo Siqueira <me@rodriados.com>
 # @copyright 2026-present Rodrigo Siqueira
 
-source ~/.shell/prompt.sh
+source "$HOME/.config/dotfiles/shell/prompt.sh"
 
 _bash_prompt_get_host() {
   if [[ "$SSH_TTY" ]];
@@ -96,7 +96,7 @@ _bash_prompt_generate_theme() {
 
 _bash_prompt_setup() {
   _shell_prompt_git_directory_check
-  export PROMPT_COMMAND="_shell_prompt_git_directory_check;$PROMPT_COMMAND"
+  export PROMPT_COMMAND="_shell_prompt_git_directory_check"
   export PS1="\[\e[1m\]$(_bash_prompt_generate_theme)\[\e[0m\]\$ "
 }
 

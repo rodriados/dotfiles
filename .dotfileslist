@@ -1,17 +1,21 @@
-link always .editorconfig .editorconfig
-link always .gdbinit .gdbinit
-link always .gitconfig .gitconfig keeplocal
-link always .wgetrc .wgetrc
-link always .shell .shell
-link linux  .xbindkeysrc .xbindkeysrc
+link always misc/.editorconfig .editorconfig
+link always misc/.gdbinit      .gdbinit
+link always git/.gitconfig     .gitconfig         keeplocal
+link always misc/.wgetrc       .wgetrc
+link linux  misc/.xbindkeysrc  .xbindkeysrc
 
-link zsh .shell/zsh/.zsh_aliases .zsh_aliases keeplocal
-link zsh .shell/zsh/.zsh_prompt  .zsh_prompt
-link zsh .shell/zsh/.zshrc       .zshrc       keeplocal
+link zsh shell/zsh/.zsh_aliases .zsh_aliases      keeplocal
+link zsh shell/zsh/.zsh_prompt  .zsh_prompt
+link zsh shell/zsh/.zshrc       .zshrc            keeplocal
 
-link bash .shell/bash/.bash_aliases .bash_aliases keeplocal
-link bash .shell/bash/.bash_options .bash_options keeplocal
-link bash .shell/bash/.bash_prompt  .bash_prompt
-link bash .shell/bash/.bash_profile .bash_profile keeplocal
+link bash shell/bash/.bash_aliases .bash_aliases  keeplocal
+link bash shell/bash/.bash_options .bash_options  keeplocal
+link bash shell/bash/.bash_profile .bash_profile  keeplocal
+link bash shell/bash/.bash_prompt  .bash_prompt
+link bash shell/bash/.bashrc       .bashrc        keeplocal
 
-copy darwin macos/Library/KeyBindings/DefaultKeyBinding.dict Library/KeyBindings/DefaultKeyBinding.dict
+link always shell/aliases.sh .config/dotfiles/shell/aliases.sh
+link always shell/globals.sh .config/dotfiles/shell/globals.sh
+link always shell/prompt.sh .config/dotfiles/shell/prompt.sh
+
+copy darwin macosx/Library/KeyBindings/DefaultKeyBinding.dict Library/KeyBindings/DefaultKeyBinding.dict

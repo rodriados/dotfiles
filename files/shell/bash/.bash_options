@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Dotfiles and environment variables repository.
+# @file The shell options configuration script for bash.
+# @author Rodrigo Siqueira <me@rodriados.com>
+# @copyright 2026-present Rodrigo Siqueira
+
+shopt -s histappend
+shopt -s checkwinsize
+shopt -s autocd
+shopt -s globstar
+shopt -s extglob
+shopt -s nocaseglob
+shopt -s cdspell
+shopt -s dirspell
+
+HISTCONTROL=ignoreboth
+HISTSIZE=5000
+HISTFILESIZE=5000
+
+source-if-exists "$HOME/.bash_options.local"
