@@ -12,27 +12,26 @@ SOURCEROOT=$(cd -- "$(dirname "$SCRIPTPATH")" >/dev/null 2>&1; pwd -P)
 declare -rx SCRIPTFILE SCRIPTPATH SOURCEROOT
 declare -rx DOTFILES_COMMAND_ARGUMENT="$1"
 
+shift
+
 # Show a help message to the user and terminate script execution.
 # @param $@ The optional command to get help message for.
 runhelp() {
-  bash "$SCRIPTPATH/command/help.sh" "$@"
-  exit 0
+  echo "Usage: dotfiles <command> [options]"
+  echo
+  echo "Dotfiles utility tools."
+  echo
+  echo "Commands:"
+  echo "  apply             Install dotfiles from repository."
+  echo "  git               Execute git in the dotfiles repository."
+  echo
+  echo "See 'dotfiles <command> help' to read about a specific command."
 }
-
-# Check whether the user wants some help on how to use any of the dotfiles tools.
-# Once the help message is shown, no other action is performed.
-if printf '%s\0' "$@" | grep -qxzE -- "--help|-h"; then
-  runhelp "$@"
-fi
-
-shift
 
 # Execute the selected function from the remaining command line arguments. If the
 # selected function is unknown, a help message is displayed instead.
 case "$DOTFILES_COMMAND_ARGUMENT" in
   apply ) bash "$SCRIPTPATH/command/apply.sh" "$@"        ;;
   git   ) bash "$SCRIPTPATH/command/git.sh" "$@"          ;;
-  *     )
-    echo "Unknown command: $DOTFILES_COMMAND_ARGUMENT"
-    runhelp "$@"                                          ;;
+  *     ) runhelp "$@"; exit 2                            ;;
 esac
