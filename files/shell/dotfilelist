@@ -1,0 +1,13 @@
+link always aliases.sh .config/dotfiles/shell/aliases.sh
+link always globals.sh .config/dotfiles/shell/globals.sh
+link always prompt.sh  .config/dotfiles/shell/prompt.sh
+
+link bash bash/.bash_prompt  .bash_prompt
+link bash bash/.bash_aliases .bash_aliases  keeplocal
+link bash bash/.bash_options .bash_options  keeplocal
+link bash bash/.bash_profile .bash_profile  keeplocal
+link bash bash/.bashrc       .bashrc        keeplocal
+
+link zsh zsh/.zsh_prompt  .zsh_prompt
+link zsh zsh/.zsh_aliases .zsh_aliases  keeplocal
+link zsh zsh/.zshrc       .zshrc        keeplocal

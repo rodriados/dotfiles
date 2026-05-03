@@ -90,7 +90,7 @@ _bash_prompt_generate_theme() {
     "\$(_bash_prompt_get_last_rc '$LAST_RETURN_CODE_STYLE')"
   )
   for prompt in "${BASH_THEME_PROMPT_PARTS[@]}"; do
-    [[ -n "$prompt" ]] && echo -en "$prompt"
+    [[ -n "$prompt" ]] && echo -n "$prompt"
   done
 }
 

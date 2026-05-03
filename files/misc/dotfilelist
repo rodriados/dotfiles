@@ -1,0 +1,4 @@
+link always .editorconfig .editorconfig
+link always .gdbinit      .gdbinit
+link always .wgetrc       .wgetrc
+link linux  .xbindkeysrc  .xbindkeysrc
