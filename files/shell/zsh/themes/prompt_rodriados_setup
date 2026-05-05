@@ -4,7 +4,7 @@
 # @author Rodrigo Siqueira <me@rodriados.com>
 # @copyright 2026-present Rodrigo Siqueira
 
-source ~/.shell/prompt.sh
+source "$HOME/.config/dotfiles/shell/prompt.sh"
 
 _zsh_prompt_get_host() {
   if [[ "$SSH_TTY" ]];

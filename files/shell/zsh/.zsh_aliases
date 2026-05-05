@@ -5,11 +5,11 @@
 # @copyright 2026-present Rodrigo Siqueira
 
 # Include the common shell aliases.
-if [ -f ~/.shell/aliases.sh ]; then
-  source ~/.shell/aliases.sh
+if [ -f ~/.config/dotfiles/shell/aliases.sh ]; then
+  source "$HOME/.config/dotfiles/shell/aliases.sh"
 fi
 
 # Include local zsh aliases.
 if [ -f ~/.zsh_aliases.local ]; then
-  source ~/.zsh_aliases.local
+  source "$HOME/.zsh_aliases.local"
 fi

@@ -91,7 +91,7 @@ runcommand() {
       local from="$FILEROOT/$1/$from"
       local dest="$DESTROOT/$dest"
 
-      [[ -f "$from" ]] || return 1
+      [[ -e "$from" ]] || return 1
 
       case "$command" in
         link ) linkfile "$from" "$dest" "$keeplocal"        ;;

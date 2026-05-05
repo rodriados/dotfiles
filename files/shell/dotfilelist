@@ -11,3 +11,4 @@ link bash bash/.bashrc       .bashrc        keeplocal
 link zsh zsh/.zsh_prompt  .zsh_prompt
 link zsh zsh/.zsh_aliases .zsh_aliases  keeplocal
 link zsh zsh/.zshrc       .zshrc        keeplocal
+link zsh zsh/themes       .config/dotfiles/shell/zsh/themes

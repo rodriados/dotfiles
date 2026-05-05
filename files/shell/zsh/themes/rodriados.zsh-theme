@@ -4,5 +4,5 @@
 # @author Rodrigo Siqueira <me@rodriados.com>
 # @copyright 2026-present Rodrigo Siqueira
 
-source ~/.shell/zsh/themes/prompt_rodriados_setup
+source "$HOME/.config/dotfiles/shell/zsh/themes/prompt_rodriados_setup"
 prompt_rodriados_setup
