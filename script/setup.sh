@@ -25,9 +25,10 @@ fi
 
 # If everything is alright, we can safely install the utility and immediately use
 # it to install the dotfiles already listed in the repository.
+mkdir -p "$TARGETPATH"
 ln -s "$INSTALLATION_SOURCE" "$INSTALLATION_TARGET"
 chmod +x "$INSTALLATION_SOURCE" "$INSTALLATION_TARGET"
-dotfiles apply "$SOURCEROOT/.dotfileslist"
+dotfiles apply
 
 # At last, we can configure the git upstream repository. If no repository link is
 # given, then the configuration is skipped but can be manually configured later.
