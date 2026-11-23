@@ -20,7 +20,7 @@ export PATH="$PATH:$TARGETPATH"
 # the existing object and bail out with an installation failure message.
 if [ -e "$INSTALLATION_TARGET" ]; then
   echo "Dotfiles utility is already installed."
-  exit 1
+  exit 0
 fi
 
 # If everything is alright, we can safely install the utility and immediately use
