@@ -6,9 +6,15 @@
 
 source "$HOME/.config/dotfiles/shell/prompt.sh"
 
+_zsh_prompt_get_container() {
+  if [[ -n "$CONTAINER_ID" ]];
+    then echo -n "%F{$1}[$CONTAINER_ID]%f "
+  fi
+}
+
 _zsh_prompt_get_host() {
-  if [[ "$SSH_TTY" ]];
-    then echo -n "%F{$1}%m%f "
+  if [[ -n "$SSH_CONNECTION" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]];
+    then echo -n "%F{$1}@%m%f "
   fi
 }
 
@@ -59,6 +65,7 @@ _zsh_prompt_report_git() {
 
 _zsh_prompt_generate_theme() {
   local ZSH_THEME_PROMPT_PARTS=(
+    "$(_zsh_prompt_get_container 166)"
     "$(_zsh_prompt_get_host 7)"
     "$(_zsh_prompt_get_user 124 64)"
     "$(_zsh_prompt_get_cwd 33)"

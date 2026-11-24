@@ -10,4 +10,3 @@ if [ -n "$BASH_VERSION" ]; then
   fi
 fi
 
-source-if-exists "$HOME/.bash_profile.local"

@@ -6,9 +6,15 @@
 
 source "$HOME/.config/dotfiles/shell/prompt.sh"
 
+_bash_prompt_get_container() {
+  if [[ -n "${CONTAINER_ID}" ]];
+    then echo -en "${1}[${CONTAINER_ID}] "
+  fi
+}
+
 _bash_prompt_get_host() {
-  if [[ "$SSH_TTY" ]];
-    then echo -en "${2}${1} "
+  if [[ -n "$SSH_CONNECTION" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]];
+    then echo -en "${2}@${1} "
   fi
 }
 
@@ -76,15 +82,17 @@ _bash_prompt_generate_theme() {
   local HOST_STYLE="\[\e[37m\]"
   local USER_ROOT_STYLE="\[\e[38;5;124m\]"
   local USER_COMMON_STYLE="\[\e[38;5;64m\]"
+  local CONTAINER_STYLE="\[\e[38;5;208m\]"
   local DIRECTORY_STYLE="\[\e[38;5;33m\]"
   local GIT_BRANCH_STYLE="\[\e[38;5;166m\]"
   local GIT_STATUS_STYLE="\[\e[38;5;125m\]"
   local BACKGROUND_JOBS_STYLE="\[\e[37m\]"
   local LAST_RETURN_CODE_STYLE="\[\e[38;5;1m\]"
   local BASH_THEME_PROMPT_PARTS=(
+    "\$(_bash_prompt_get_container '$CONTAINER_STYLE')"
     "\$(_bash_prompt_get_host '\h' '$HOST_STYLE')"
     "\$(_bash_prompt_get_user '\u' '$USER_ROOT_STYLE' '$USER_COMMON_STYLE')"
-    "\$(_bash_prompt_get_cwd  '\w' '$DIRECTORY_STYLE')"
+    "\$(_bash_prompt_get_cwd '\w' '$DIRECTORY_STYLE')"
     "\$(_bash_prompt_report_git '$GIT_BRANCH_STYLE' '$GIT_STATUS_STYLE')"
     "\$(_bash_prompt_report_jobs '\j' '$BACKGROUND_JOBS_STYLE')"
     "\$(_bash_prompt_get_last_rc '$LAST_RETURN_CODE_STYLE')"
