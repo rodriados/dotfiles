@@ -33,5 +33,5 @@ dotfiles apply
 # At last, we can configure the git upstream repository. If no repository link is
 # given, then the configuration is skipped but can be manually configured later.
 if [ -n "$REPOSITORY_UPSTREAM" ]; then
-  dotfiles git setup "$REPOSITORY_UPSTREAM"
+  dotfiles setup "$REPOSITORY_UPSTREAM"
 fi
